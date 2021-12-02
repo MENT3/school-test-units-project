@@ -20,17 +20,22 @@ def competitions():
         listOfCompetitions = json.load(comps)['competitions']
         return listOfCompetitions
 
-def test_home_page(client):
+def test_get_home_page(client):
     res = client.get('/')
 
     assert res.status_code == 200
     assert b'<form action="showSummary"' in res.data
     assert b'<input' in res.data
 
-def test_summary_page(client, clubs):
+def test_post_summary_page(client, clubs, competitions):
     res = client.post('/showSummary',
         data=dict(email=clubs[0]['email']),
         follow_redirects=True)
 
-    print(res.status_code)
-    print(res.data.decode())
+    assert res.status_code == 200
+    assert b'<h3>Competitions:</h3>'
+
+    for competition in competitions:
+        assert str.encode(competition['name']) in res.data
+        assert str.encode(competition['date']) in res.data
+        assert str.encode(competition['numberOfPlaces']) in res.data
