@@ -30,7 +30,9 @@ def test_post_success(client, reset_data, clubs, competitions):
     assert int(club['points']) == int(club_points_before_request) - 5
 
 @pytest.mark.parametrize('club_slug, competition_slug, requested_places', [
-    ('simply-lift', 'spring-festival', 13)
+    ('simply-lift', 'spring-festival', 13), # Test more than 12 place requested
+    ('iron-temple', 'spring-festival', 10), # Test club insuffisant points
+    ('simply-lift', 'fall-classic', 10) # Test competition insuffisant remeaning places
 ])
 def test_post_when_invalid(client, reset_data, clubs, competitions, club_slug, competition_slug, requested_places):
     reset_data
