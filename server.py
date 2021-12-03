@@ -45,11 +45,11 @@ def purchasePlaces():
 
         if int(requested_places) > 12: raise
         elif int(requested_places) > int(competition['numberOfPlaces']): raise
-        elif (int(requested_places) * 5) > int(club['points']): raise
+        elif (int(requested_places) * 3) > int(club['points']): raise
 
         update_club_from_slug(club_slug, {
             **club,
-            'points': str(int(club['points']) - int(requested_places) * 5)
+            'points': str(int(club['points']) - int(requested_places) * 3)
         })
 
         update_competition_from_slug(competition_slug, {

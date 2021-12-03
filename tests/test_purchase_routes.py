@@ -27,7 +27,7 @@ def test_post_success(client, reset_data, clubs, competitions):
     club = find_from_slug(clubs, 'simply-lift')
 
     assert int(competition['numberOfPlaces']) == int(number_of_places_before_request) - 1
-    assert int(club['points']) == int(club_points_before_request) - 5
+    assert int(club['points']) == int(club_points_before_request) - 3
 
 @pytest.mark.parametrize('club_slug, competition_slug, requested_places', [
     ('simply-lift', 'spring-festival', 13), # Test more than 12 place requested
