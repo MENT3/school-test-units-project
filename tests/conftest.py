@@ -2,6 +2,8 @@ import json
 import pytest
 from server import app as flask_app
 
+from utils import loadClubs, loadCompetitions
+
 @pytest.fixture
 def client():
     flask_app.config['TESTING'] = True
@@ -10,12 +12,8 @@ def client():
 
 @pytest.fixture(scope='module')
 def clubs():
-    with open('clubs.json') as c:
-        listOfClubs = json.load(c)['clubs']
-        return listOfClubs
+    return loadClubs()
 
 @pytest.fixture(scope='module')
 def competitions():
-    with open('competitions.json') as comps:
-        listOfCompetitions = json.load(comps)['competitions']
-        return listOfCompetitions
+    return loadCompetitions()

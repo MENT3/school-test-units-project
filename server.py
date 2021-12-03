@@ -1,17 +1,5 @@
-import json
 from flask import Flask, render_template, request, redirect, flash, url_for
-
-def loadClubs():
-    with open('clubs.json') as c:
-        listOfClubs = json.load(c)['clubs']
-        return listOfClubs
-
-
-def loadCompetitions():
-    with open('competitions.json') as comps:
-        listOfCompetitions = json.load(comps)['competitions']
-        return listOfCompetitions
-
+from utils import find_from_slug, loadClubs, loadCompetitions
 
 app = Flask(__name__)
 app.secret_key = 'something_special'
@@ -33,16 +21,15 @@ def showSummary():
         flash('Désolé, cet email n\'a pas été trouvé', 'error')
         return render_template('index.html'), 404
 
+@app.route('/book/<competition_slug>/<club_slug>')
+def book(competition_slug, club_slug):
+    competition = find_from_slug(competitions, competition_slug)
+    club = find_from_slug(clubs, club_slug)
 
-@app.route('/book/<competition>/<club>')
-def book(competition, club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [
-        c for c in competitions if c['name'] == competition][0]
-    if foundClub and foundCompetition:
-        return render_template('booking.html', club=foundClub, competition=foundCompetition)
+    if club and competition:
+        return render_template('booking.html', club=club, competition=competition)
     else:
-        flash("Something went wrong-please try again")
+        flash("Something went wrong-please try again", 'error')
         return render_template('welcome.html', club=club, competitions=competitions)
 
 @app.route('/purchasePlaces', methods=['POST'])
@@ -53,7 +40,7 @@ def purchasePlaces():
     placesRequired = int(request.form['places'])
     competition['numberOfPlaces'] = int(
         competition['numberOfPlaces'])-placesRequired
-    flash('Great-booking complete!')
+    flash('Great-booking complete!', 'success')
     return render_template('welcome.html', club=club, competitions=competitions)
 
 # TODO: Add route for points display
