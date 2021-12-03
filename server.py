@@ -67,14 +67,15 @@ def purchasePlaces():
         flash('Impossible de réserver', 'error')
         return render_template('booking.html', club=club, competition=competition), 500
 
+@app.route('/dashboard')
+def public_dashboard():
+    return render_template('dashboard.html', clubs=g.clubs, competitions=g.competitions)
+
 @app.route('/reset-data')
 def reset_data():
     reset_jsons()
     flash('Data correctement reset', 'success')
     return redirect(url_for('index'))
-
-# TODO: Reset JSON values
-# TODO: Add route for points display
 
 @app.route('/logout')
 def logout():
