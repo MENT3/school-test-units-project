@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request, redirect, flash, url_for
-from utils import find_from_slug, loadClubs, loadCompetitions
+from flask import Flask, render_template, request, redirect, flash, url_for, g
+from utils import find_from_slug, load_clubs, load_competitions, update_club_from_slug, update_competition_from_slug
 
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
-competitions = loadCompetitions()
-clubs = loadClubs()
+@app.before_request
+def before_all():
+    g.competitions = load_competitions()
+    g.clubs = load_clubs()
 
 @app.route('/')
 def index():
@@ -14,36 +16,72 @@ def index():
 @app.route('/showSummary', methods=['POST'])
 def showSummary():
     try:
-        club = [club for club in clubs if club['email'] == request.form['email']][0]
+        club = [club for club in g.clubs if club['email'] == request.form['email']][0]
 
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=club, competitions=g.competitions)
     except IndexError:
         flash('Désolé, cet email n\'a pas été trouvé', 'error')
         return render_template('index.html'), 404
 
 @app.route('/book/<competition_slug>/<club_slug>')
 def book(competition_slug, club_slug):
-    competition = find_from_slug(competitions, competition_slug)
-    club = find_from_slug(clubs, club_slug)
+    competition = find_from_slug(g.competitions, competition_slug)
+    club = find_from_slug(g.clubs, club_slug)
 
     if club and competition:
         return render_template('booking.html', club=club, competition=competition)
     else:
         flash("Something went wrong-please try again", 'error')
         return render_template('welcome.html',
-            club=club, competitions=competitions), 404
+            club=club, competitions=g.competitions), 404
 
 @app.route('/purchasePlaces', methods=['POST'])
 def purchasePlaces():
-    competition = [c for c in competitions if c['name']
-                    == request.form['competition']][0]
-    club = [c for c in clubs if c['name'] == request.form['club']][0]
-    placesRequired = int(request.form['places'])
-    competition['numberOfPlaces'] = int(
-        competition['numberOfPlaces'])-placesRequired
-    flash('Great-booking complete!', 'success')
-    return render_template('welcome.html', club=club, competitions=competitions)
+    club_slug, competition_slug, requested_places = request.form.values()
 
+    try:
+        competition = find_from_slug(g.competitions, competition_slug)
+        club = find_from_slug(g.clubs, club_slug)
+
+        if int(requested_places) > 12: raise
+        elif int(requested_places) > int(competition['numberOfPlaces']): raise
+        elif (int(requested_places) * 5) > int(club['points']): raise
+
+        update_club_from_slug(club_slug, {
+            **club,
+            'points': str(int(club['points']) - int(requested_places) * 5)
+        })
+
+        update_competition_from_slug(competition_slug, {
+            **competition,
+            'numberOfPlaces': str(int(competition['numberOfPlaces']) - int(requested_places))
+        })
+
+        # reload json data
+        club = find_from_slug(g.clubs, club_slug)
+        competitions = load_competitions()
+
+        flash('Great-booking complete!', 'success')
+        return render_template('welcome.html', club=club, competitions=competitions)
+    except:
+        flash('Impossible de réserver', 'error')
+        return render_template('booking.html', club=club, competition=competition), 500
+
+
+    # update_club_from_slug(club_slug, {
+    #     **club,
+    #     'points': '1000'
+    # })
+
+    # club_remeaming_point = club['points']
+    # placesRequired = int(places)
+
+    # competition['numberOfPlaces'] = int(
+    #     competition['numberOfPlaces']) - placesRequired
+
+
+
+# TODO: Reset JSON values
 # TODO: Add route for points display
 
 @app.route('/logout')

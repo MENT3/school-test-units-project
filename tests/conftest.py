@@ -2,7 +2,7 @@ import json
 import pytest
 from server import app as flask_app
 
-from utils import loadClubs, loadCompetitions
+from utils import load_clubs, load_competitions
 
 @pytest.fixture
 def client():
@@ -12,8 +12,8 @@ def client():
 
 @pytest.fixture(scope='module')
 def clubs():
-    return loadClubs()
+    return load_clubs()
 
 @pytest.fixture(scope='module')
 def competitions():
-    return loadCompetitions()
+    return load_competitions()
