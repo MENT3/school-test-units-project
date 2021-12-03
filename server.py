@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, flash, url_for, g
-from utils import find_from_slug, load_clubs, load_competitions, update_club_from_slug, update_competition_from_slug
+from utils import find_from_slug, load_clubs, load_competitions, reset_jsons, update_club_from_slug, update_competition_from_slug
 
 app = Flask(__name__)
 app.secret_key = 'something_special'
@@ -67,19 +67,11 @@ def purchasePlaces():
         flash('Impossible de réserver', 'error')
         return render_template('booking.html', club=club, competition=competition), 500
 
-
-    # update_club_from_slug(club_slug, {
-    #     **club,
-    #     'points': '1000'
-    # })
-
-    # club_remeaming_point = club['points']
-    # placesRequired = int(places)
-
-    # competition['numberOfPlaces'] = int(
-    #     competition['numberOfPlaces']) - placesRequired
-
-
+@app.route('/reset-data')
+def reset_data():
+    reset_jsons()
+    flash('Data correctement reset', 'success')
+    return redirect(url_for('index'))
 
 # TODO: Reset JSON values
 # TODO: Add route for points display
