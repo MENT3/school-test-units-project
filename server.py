@@ -30,7 +30,8 @@ def book(competition_slug, club_slug):
         return render_template('booking.html', club=club, competition=competition)
     else:
         flash("Something went wrong-please try again", 'error')
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html',
+            club=club, competitions=competitions), 404
 
 @app.route('/purchasePlaces', methods=['POST'])
 def purchasePlaces():
