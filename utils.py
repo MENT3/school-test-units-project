@@ -4,6 +4,10 @@ def find_from_slug(items, slug):
     item = (item for item in items if item['slug'] == slug)
     return next(item, False)
 
+def find_by(key, value, items):
+    item = (item for item in items if item[key] == value)
+    return next(item, False)
+
 def load_clubs():
     with open('clubs.json') as club:
         return json.load(club)['clubs']

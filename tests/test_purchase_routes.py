@@ -1,11 +1,11 @@
 import pytest
-from utils import find_from_slug, load_clubs, load_competitions
+from utils import find_by, load_clubs, load_competitions
 
 def test_post_success(client, reset_data, clubs, competitions):
     reset_data
 
-    competition = find_from_slug(competitions, 'spring-festival')
-    club = find_from_slug(clubs, 'simply-lift')
+    competition = find_by('slug', 'spring-festival', competitions)
+    club = find_by('slug', 'simply-lift', clubs)
 
     number_of_places_before_request = competition['numberOfPlaces']
     club_points_before_request = club['points']
@@ -23,8 +23,8 @@ def test_post_success(client, reset_data, clubs, competitions):
     competitions = load_competitions()
     clubs = load_clubs()
 
-    competition = find_from_slug(competitions, 'spring-festival')
-    club = find_from_slug(clubs, 'simply-lift')
+    competition = find_by('slug', 'spring-festival', competitions)
+    club = find_by('slug', 'simply-lift', clubs)
 
     assert int(competition['numberOfPlaces']) == int(number_of_places_before_request) - 1
     assert int(club['points']) == int(club_points_before_request) - 3
@@ -37,8 +37,8 @@ def test_post_success(client, reset_data, clubs, competitions):
 def test_post_when_invalid(client, reset_data, clubs, competitions, club_slug, competition_slug, requested_places):
     reset_data
 
-    club = find_from_slug(clubs, club_slug)
-    competition = find_from_slug(competitions, competition_slug)
+    club = find_by('slug', club_slug, clubs)
+    competition = find_by('slug', competition_slug, competitions)
 
     number_of_places_before_request = competition['numberOfPlaces']
     club_points_before_request = club['points']
@@ -56,8 +56,8 @@ def test_post_when_invalid(client, reset_data, clubs, competitions, club_slug, c
     competitions = load_competitions()
     clubs = load_clubs()
 
-    club = find_from_slug(clubs, club_slug)
-    competition = find_from_slug(competitions, competition_slug)
+    club = find_by('slug', club_slug, clubs)
+    competition = find_by('slug', competition_slug, competitions)
 
     assert int(competition['numberOfPlaces']) == int(number_of_places_before_request)
     assert int(club['points']) == int(club_points_before_request)

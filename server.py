@@ -1,32 +1,47 @@
-from flask import Flask, render_template, request, redirect, flash, url_for, g
-from utils import find_from_slug, load_clubs, load_competitions, reset_jsons, update_club_from_slug, update_competition_from_slug
+from flask import Flask, render_template, request, redirect, flash, url_for, g, session
+from utils import find_by, load_clubs, load_competitions, reset_jsons, update_club_from_slug, update_competition_from_slug
 
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
 @app.before_request
 def before_all():
+    public_endpoints = ['index', 'public_dashboard', 'reset_data']
     g.competitions = load_competitions()
     g.clubs = load_clubs()
+
+    if 'club_slug' in session:
+        if request.endpoint == 'book':
+            club_slug = request.view_args.get('club_slug')
+            if session['club_slug'] != club_slug:
+                flash('Vous ne pouvew acceder à cette page', 'error')
+                return redirect(url_for('index'))
+    else:
+        if request.endpoint == 'show_summary' and 'email' in request.form:
+            return
+        elif request.endpoint not in public_endpoints:
+            flash('Vous devez être connecté pour acceder à cette page', 'error')
+            return redirect(url_for('index'))
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/showSummary', methods=['POST'])
-def showSummary():
-    try:
-        club = [club for club in g.clubs if club['email'] == request.form['email']][0]
+def show_summary():
+    club = find_by('email', request.form['email'], g.clubs)
 
+    if club:
+        session['club_slug'] = club['slug']
         return render_template('welcome.html', club=club, competitions=g.competitions)
-    except IndexError:
+    else:
         flash('Désolé, cet email n\'a pas été trouvé', 'error')
         return render_template('index.html'), 404
 
 @app.route('/book/<competition_slug>/<club_slug>')
 def book(competition_slug, club_slug):
-    competition = find_from_slug(g.competitions, competition_slug)
-    club = find_from_slug(g.clubs, club_slug)
+    competition = find_by('slug', competition_slug, g.competitions)
+    club = find_by('slug', club_slug, g.clubs)
 
     if club and competition:
         return render_template('booking.html', club=club, competition=competition)
@@ -36,12 +51,12 @@ def book(competition_slug, club_slug):
             club=club, competitions=g.competitions), 404
 
 @app.route('/purchasePlaces', methods=['POST'])
-def purchasePlaces():
+def purchase_places():
     club_slug, competition_slug, requested_places = request.form.values()
 
     try:
-        competition = find_from_slug(g.competitions, competition_slug)
-        club = find_from_slug(g.clubs, club_slug)
+        competition = find_by('slug', competition_slug, g.competitions)
+        club = find_by('slug', club_slug, g.clubs)
 
         if int(requested_places) > 12: raise
         elif int(requested_places) > int(competition['numberOfPlaces']): raise
@@ -58,7 +73,7 @@ def purchasePlaces():
         })
 
         # reload json data
-        club = find_from_slug(g.clubs, club_slug)
+        club = find_by('slug', club_slug, g.clubs)
         competitions = load_competitions()
 
         flash('Great-booking complete!', 'success')
@@ -79,6 +94,7 @@ def reset_data():
 
 @app.route('/logout')
 def logout():
+    session.clear()
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
