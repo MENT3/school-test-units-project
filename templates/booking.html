@@ -1,10 +1,5 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking for {{ competition['name'] }} || GUDLFT</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}
     <h2>{{ competition['name'] }}</h2>
     {% with messages = get_flashed_messages(with_categories=True)%}
     {% if messages %}
@@ -32,5 +27,4 @@
         <input type="number" name="places" id=""/>
         <button type="submit">Book</button>
     </form>
-</body>
-</html>
+{% endblock %}

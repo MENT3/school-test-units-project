@@ -1,7 +1,6 @@
 import json
 import pytest
 from server import app as flask_app
-
 from utils import load_clubs, load_competitions, reset_jsons
 
 @pytest.fixture
