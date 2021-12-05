@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, url_for, g, session
+from flask import Flask, abort, render_template, request, redirect, flash, url_for, g, session
 from utils import find_by, load_clubs, load_competitions, reset_jsons, update_club_from_slug, update_competition_from_slug
 
 app = Flask(__name__)
@@ -14,14 +14,12 @@ def before_all():
         if request.endpoint == 'book':
             club_slug = request.view_args.get('club_slug')
             if session['club_slug'] != club_slug:
-                flash('Vous ne pouvew acceder à cette page', 'error')
-                return redirect(url_for('index'))
+                abort(403)
     else:
         if request.endpoint == 'show_summary' and 'email' in request.form:
             return
         elif request.endpoint not in public_endpoints:
-            flash('Vous devez être connecté pour acceder à cette page', 'error')
-            return redirect(url_for('index'))
+            abort(403)
 
 @app.route('/')
 def index():

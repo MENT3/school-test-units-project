@@ -31,3 +31,12 @@ def test_get_book_with_invalid_slug(client, competition_slug, club_slug):
 
     assert res.status_code == 404
     assert 'Something went wrong-please try again' in res.data.decode()
+
+def test_post_when_not_logged_in(client, competitions):
+    competition = competitions[0]
+
+    res = client \
+            .get('/book/{competition_slug}/simply-lift' \
+            .format(competition_slug=competition['slug']))
+
+    assert res.status_code == 403

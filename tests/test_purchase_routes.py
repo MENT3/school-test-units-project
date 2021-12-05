@@ -67,3 +67,12 @@ def test_post_when_invalid(client, reset_data, clubs, competitions, club_slug, c
 
     assert int(competition['numberOfPlaces']) == int(number_of_places_before_request)
     assert int(club['points']) == int(club_points_before_request)
+
+def test_post_when_not_logged_in(client):
+    res = client.post('/purchasePlaces', data=dict(
+        club='simply-lift',
+        competition='fall-classic',
+        places=1
+    ), follow_redirects=True)
+
+    assert res.status_code == 403
