@@ -43,8 +43,8 @@ def test_post_when_invalid(client, reset_data, clubs, competitions, club_slug, c
     club = find_by('slug', club_slug, clubs)
     competition = find_by('slug', competition_slug, competitions)
 
-    number_of_places_before_request = competition['numberOfPlaces']
     club_points_before_request = club['points']
+    number_of_places_before_request = competition['numberOfPlaces']
 
     with client.session_transaction() as sess:
         sess['club_slug'] = club['slug']
@@ -53,7 +53,7 @@ def test_post_when_invalid(client, reset_data, clubs, competitions, club_slug, c
         club=club['slug'],
         competition=competition['slug'],
         places=requested_places
-    ))
+    ), follow_redirects=True)
 
     assert res.status_code == 500
     assert 'Impossible de réserver' in res.data.decode()
@@ -65,8 +65,8 @@ def test_post_when_invalid(client, reset_data, clubs, competitions, club_slug, c
     club = find_by('slug', club_slug, clubs)
     competition = find_by('slug', competition_slug, competitions)
 
-    assert int(competition['numberOfPlaces']) == int(number_of_places_before_request)
     assert int(club['points']) == int(club_points_before_request)
+    assert int(competition['numberOfPlaces']) == int(number_of_places_before_request)
 
 def test_post_when_not_logged_in(client):
     res = client.post('/purchasePlaces', data=dict(
