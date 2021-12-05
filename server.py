@@ -56,9 +56,9 @@ def purchase_places():
         competition = find_by('slug', competition_slug, g.competitions)
         club = find_by('slug', club_slug, g.clubs)
 
-        if int(requested_places) > 12: raise
-        elif int(requested_places) > int(competition['numberOfPlaces']): raise
-        elif (int(requested_places) * 3) > int(club['points']): raise
+        if int(requested_places) > 12: raise ValueError
+        elif int(requested_places) > int(competition['numberOfPlaces']): raise ValueError
+        elif (int(requested_places) * 3) > int(club['points']): raise ValueError
 
         update_club_from_slug(club_slug, {
             **club,
@@ -71,12 +71,13 @@ def purchase_places():
         })
 
         # reload json data
-        club = find_by('slug', club_slug, g.clubs)
+        clubs = load_clubs()
+        club = find_by('slug', club_slug, clubs)
         competitions = load_competitions()
 
         flash('Great-booking complete!', 'success')
         return render_template('welcome.html', club=club, competitions=competitions)
-    except:
+    except Exception as err:
         flash('Impossible de réserver', 'error')
         return render_template('booking.html', club=club, competition=competition), 500
 
