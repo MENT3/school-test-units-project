@@ -7,6 +7,24 @@
     <title>Summary | GUDLFT Registration</title>
 </head>
 <body>
-    {% block content %}{% endblock %}
+    <div class="container mx-auto py-8">
+        {% with messages = get_flashed_messages(with_categories=True)%}
+        {% if messages %}
+        <ul>
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                    <li style="color: red;">{{ message }}</li>
+                {% elif category == 'success' %}
+                    <li style="color: green;">{{ message }}</li>
+                {% else %}
+                    <li>{{ message }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif%}
+        {%endwith%}
+
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>

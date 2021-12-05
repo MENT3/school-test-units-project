@@ -1,25 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h2>Welcome, {{ club['email'] }} </h2>
+    <div class="w-full mb-4 flex justify-between items-center">
+        <h1 class="text-lg text-gray-800 font-semibold">
+            Welcome, {{ club['email'] }}
+        </h1>
 
-    <a href="{{ url_for('logout') }}">
-        Logout
-    </a>
+        <a
+            href="{{ url_for('logout') }}"
+            class="text-indigo-600 transition hover:tex text-indigo-700 hover:underline"
+        >
+            Logout
+        </a>
+    </div>
 
-    {% with messages = get_flashed_messages(with_categories=True)%}
-    {% if messages %}
-        <ul>
-       {% for category, message in messages %}
-            {% if category == 'error' %}
-                <li style="color: red;">{{ message }}</li>
-            {% elif category == 'success' %}
-                <li style="color: green;">{{ message }}</li>
-            {% else %}
-                <li>{{ message }}</li>
-            {% endif %}
-        {% endfor %}
-       </ul>
-    {% endif %}
 
     Points available: {{ club['points'] }}
 
@@ -40,5 +33,4 @@
         <hr />
         {% endfor %}
     </ul>
-    {% endwith %}
 {% endblock %}
