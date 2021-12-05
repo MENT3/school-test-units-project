@@ -13,10 +13,10 @@ def client():
 def reset_data():
     return reset_jsons()
 
-@pytest.fixture(scope='module')
+@pytest.fixture
 def clubs():
     return load_clubs()
 
-@pytest.fixture(scope='module')
+@pytest.fixture
 def competitions():
     return load_competitions()
