@@ -10,6 +10,9 @@ def test_post_success(client, reset_data, clubs, competitions):
     number_of_places_before_request = competition['numberOfPlaces']
     club_points_before_request = club['points']
 
+    with client.session_transaction() as sess:
+        sess['club_slug'] = club['slug']
+
     res = client.post('/purchasePlaces', data=dict(
         club=club['slug'],
         competition=competition['slug'],
@@ -42,6 +45,9 @@ def test_post_when_invalid(client, reset_data, clubs, competitions, club_slug, c
 
     number_of_places_before_request = competition['numberOfPlaces']
     club_points_before_request = club['points']
+
+    with client.session_transaction() as sess:
+        sess['club_slug'] = club['slug']
 
     res = client.post('/purchasePlaces', data=dict(
         club=club['slug'],
