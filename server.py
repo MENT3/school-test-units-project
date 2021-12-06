@@ -77,7 +77,7 @@ def purchase_places():
 
         flash('Great-booking complete!', 'success')
         return render_template('welcome.html', club=club, competitions=competitions)
-    except Exception as err:
+    except:
         flash('Impossible de réserver', 'error')
         return render_template('booking.html', club=club, competition=competition), 500
 
