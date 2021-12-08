@@ -1,4 +1,4 @@
-import random
+from random import choice
 
 def test_first_scenario(client, reset_data, clubs, competitions):
     reset_data
@@ -9,7 +9,7 @@ def test_first_scenario(client, reset_data, clubs, competitions):
     assert index_res.status_code == 200
 
     # show summary
-    random_club = random.choice(clubs)
+    random_club = choice(clubs)
     show_summary_res = client.post('/showSummary', data=dict(
         email=random_club['email']
     ), follow_redirects=True)
@@ -21,7 +21,7 @@ def test_first_scenario(client, reset_data, clubs, competitions):
         assert sess['club_slug'] == random_club['slug']
 
     # book
-    random_competition = random.choice(competitions)
+    random_competition = choice(competitions)
     book_url = 'book/{competition_slug}/{club_slug}' \
         .format(competition_slug=random_competition['slug'],
                 club_slug=random_club['slug'])

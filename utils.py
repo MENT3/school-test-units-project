@@ -1,13 +1,5 @@
 import json
 
-def find_from_slug(items, slug):
-    item = (item for item in items if item['slug'] == slug)
-    return next(item, False)
-
-def find_by(key, value, items):
-    item = (item for item in items if item[key] == value)
-    return next(item, False)
-
 def load_clubs():
     clubs_file = open('clubs.json')
     clubs_values = json.load(clubs_file)['clubs']
@@ -21,6 +13,10 @@ def load_competitions():
     competitions_file.close()
 
     return competitions_values
+
+def find_by(key, value, items):
+    item = (item for item in items if item[key] == value)
+    return next(item, False)
 
 def update_club_from_slug(slug, payload):
     clubs = load_clubs()
