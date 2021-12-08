@@ -16,7 +16,9 @@ def test_get_book_success(client, competitions):
     assert res.status_code == 200
 
     html = res.data.decode()
-    assert '<h2>{competition_name}</h2>'.format(competition_name=competition['name']) in html
+    assert '<h1 class="text-xl text-gray-800 font-bold">\n  {competition_name}\n</h1>' \
+        .format(competition_name=competition['name']) in html
+
     assert competition['numberOfPlaces'] in html
 
 @pytest.mark.parametrize('competition_slug, club_slug', [
