@@ -6,66 +6,76 @@
       Dashboard
     </h1>
 
-    <table class="w-full mt-8 table-auto">
-      <thead class="bg-green-300">
-        <tr class="text-left">
-          <th class="px-4 py-2">
-            Nom
-          </th>
-          <th class="px-4 py-2">
-            Slug
-          </th>
-          <th class="px-4 py-2">
-            Date
-          </th>
-          <th class="px-4 py-2">
-            Places disponibles
-          </th>
-        </tr>
-      </thead>
+    <div class="mt-8">
+      <h3 class="text-xl text-gray-800 font-semibold">
+        Compétitions
+      </h3>
 
-      <tbody class="bg-green-50">
-        {% for competition in competitions %}
-          <tr>
-            {% for v in competition.values() %}
-              <td class="px-4 py-2">
-                {{ v }}
-              </td>
-            {% endfor %}
+      <table class="w-full mt-2 table-auto">
+        <thead class="bg-green-300">
+          <tr class="text-left">
+            <th class="px-4 py-2">
+              Nom
+            </th>
+            <th class="px-4 py-2">
+              Slug
+            </th>
+            <th class="px-4 py-2">
+              Date
+            </th>
+            <th class="px-4 py-2">
+              Places disponibles
+            </th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="bg-green-50">
+          {% for competition in competitions %}
+            <tr>
+              {% for v in competition.values() %}
+                <td class="px-4 py-2">
+                  {{ v }}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-    <table class="w-full mt-12 table-auto">
-      <thead class="bg-blue-300 text-left">
-        <tr>
-          <th class="px-4 py-2">
-            Nom
-          </th>
-          <th class="px-4 py-2">
-            Slug
-          </th>
-          <th class="px-4 py-2">
-            Email
-          </th>
-          <th class="px-4 py-2">
-            Points
-          </th>
-        </tr>
-      </thead>
+    <div class="mt-12">
+      <h3 class="text-xl text-gray-800 font-semibold">
+        Clubs
+      </h3>
 
-      <tbody class="bg-blue-50">
-        {% for club in clubs %}
+      <table class="w-full mt-2 table-auto">
+        <thead class="bg-blue-300 text-left">
           <tr>
-            {% for v in club.values() %}
-              <td class="px-4 py-2">
-                {{ v }}
-              </td>
-            {% endfor %}
+            <th class="px-4 py-2">
+              Nom
+            </th>
+            <th class="px-4 py-2">
+              Slug
+            </th>
+            <th class="px-4 py-2">
+              Email
+            </th>
+            <th class="px-4 py-2">
+              Points
+            </th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="bg-blue-50">
+          {% for club in clubs %}
+            <tr>
+              {% for v in club.values() %}
+                <td class="px-4 py-2">
+                  {{ v }}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}
