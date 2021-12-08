@@ -1,30 +1,30 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <title>Summary | GUDLFT Registration</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <title>Summary | GUDLFT Registration</title>
 </head>
 <body>
-    <div class="container mx-auto py-8">
-        {% with messages = get_flashed_messages(with_categories=True)%}
-        {% if messages %}
-        <ul>
-            {% for category, message in messages %}
-                {% if category == 'error' %}
-                    <li style="color: red;">{{ message }}</li>
-                {% elif category == 'success' %}
-                    <li style="color: green;">{{ message }}</li>
-                {% else %}
-                    <li>{{ message }}</li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        {% endif%}
-        {%endwith%}
+  <div class="container mx-auto py-8">
+    {% with messages = get_flashed_messages(with_categories=True)%}
+    {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        {% if category == 'error' %}
+          <li style="color: red;">{{ message }}</li>
+        {% elif category == 'success' %}
+          <li style="color: green;">{{ message }}</li>
+        {% else %}
+          <li>{{ message }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    {% endif%}
+    {%endwith%}
 
-        {% block content %}{% endblock %}
-    </div>
+    {% block content %}{% endblock %}
+  </div>
 </body>
 </html>
