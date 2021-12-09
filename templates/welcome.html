@@ -1,52 +1,36 @@
-{% extends "layout.html" %}
-{% block content %}
-<div class="w-full mb-4 flex justify-between items-center">
-  <h1 class="text-lg text-gray-800 font-semibold">
-    Welcome, {{ club['email'] }}
-  </h1>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary | GUDLFT Registration</title>
+</head>
+<body>
+        <h2>Welcome, {{club['email']}} </h2><a href="{{url_for('logout')}}">Logout</a>
 
-  <a
-    href="{{ url_for('logout') }}"
-    class="text-indigo-600 transition hover:tex text-indigo-700 hover:underline"
-  >
-    Logout
-  </a>
-</div>
+    {% with messages = get_flashed_messages()%}
+    {% if messages %}
+        <ul>
+       {% for message in messages %}
+            <li>{{message}}</li>
+        {% endfor %}
+       </ul>
+    {% endif%}
+    Points available: {{club['points']}}
+    <h3>Competitions:</h3>
+    <ul>
+        {% for comp in competitions%}
+        <li>
+            {{comp['name']}}<br />
+            Date: {{comp['date']}}</br>
+            Number of Places: {{comp['numberOfPlaces']}}
+            {%if comp['numberOfPlaces']|int >0%}
+            <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
+            {%endif%}
+        </li>
+        <hr />
+        {% endfor %}
+    </ul>
+    {%endwith%}
 
-
-<span class="text-gray-800 font-semibold">
-  Points available: <span class="text-indigo-700">{{ club['points'] }}</span>
-</span>
-
-<div class="mt-4">
-  <h3 class="text-gray-800 font-semibold">
-    Compétitions :
-  </h3>
-  <ul class="mt-2 flex space-x-4">
-    {% for comp in competitions%}
-    <li class="p-4 bg-white border rounded">
-      <h4 class="text-gray-800 font-semibold">
-        {{ comp['name'] }}
-      </h4>
-
-      <p>
-        Date: {{ comp['date'] }}
-      </p>
-      <p>
-        Number of Places: {{ comp['numberOfPlaces'] }}
-      </p>
-
-      {% if comp['numberOfPlaces']|int > 0 %}
-      <a
-        href="{{ url_for('book',competition_slug=comp['slug'],club_slug=club['slug']) }}"
-        class="block w-max mt-2 py-2 px-3 bg-indigo-600 text-white text-sm rounded transition hover:bg-indigo-700 hover:shadow"
-      >
-        Book Places
-      </a>
-      {% endif %}
-    </li>
-    <hr />
-    {% endfor %}
-  </ul>
-</div>
-{% endblock %}
+</body>
+</html>
