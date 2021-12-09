@@ -3,8 +3,6 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/fixed-bugs.svg)](https://forthebadge.com)
 
-Description Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam libero facere dolor ullam expedita, at esse ipsum nesciunt eum eveniet labore vel minima quos laudantium, distinctio officia provident odit sequi!
-
 <br>
 
 ## Liens
