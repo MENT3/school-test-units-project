@@ -9,34 +9,26 @@ class WebsiteTestUser(HttpUser):
         session="eyJjbHViX3NsdWciOiJzaW1wbHktbGlmdCJ9.YbBiPg.FXW4U3NcB89D4IrupImk8aSoWhk"
     )
 
-    def on_start(self):
-        """" on_start is called when the TaskSet is starting """
-        pass
-
-    def on_stop(self):
-        """" on_stop is called when the TaskSet is stopping """
-        pass
-
-    @task(1)
+    @task
     def index(self):
         self.client.get('http://localhost:5000')
 
-    @task(2)
+    @task
     def dashboard(self):
         self.client.get('http://localhost:5000/dashboard')
 
-    @task(3)
+    @task
     def book(self):
         self.client.get('http://localhost:5000/book/fall-classic/simply-lift',
             cookies=self.auth_cookies)
 
-    @task(4)
+    @task
     def show_summary(self):
         self.client.post('http://localhost:5000/showSummary', {
             'email': self.auth_email
         })
 
-    @task(5)
+    @task
     def purchase_places(self):
         self.client.post('http://localhost:5000/purchasePlaces', {
             'club_slug': 'simply-lift',
@@ -44,6 +36,6 @@ class WebsiteTestUser(HttpUser):
             'places': '1'
         }, cookies=self.auth_cookies)
 
-    @task(6)
+    @task(5)
     def reset_data(self):
         self.client.get('http://localhost:5000/reset-data')
