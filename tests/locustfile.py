@@ -33,7 +33,7 @@ class WebsiteTestUser(HttpUser):
     @task(4)
     def show_summary(self):
         self.client.post('http://localhost:5000/showSummary', {
-            'email': self.euth_email
+            'email': self.auth_email
         })
 
     @task(5)
