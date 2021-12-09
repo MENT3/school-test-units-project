@@ -7,6 +7,14 @@ Description Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam libero
 
 <br>
 
+## Liens
+Rapport locust: https://ment3.github.io/school-test-units-project/locust_report.html
+
+Rapport de couverture: https://ment3.github.io/school-test-units-project
+
+<br>
+
+
 ## Installation
 ---
 
